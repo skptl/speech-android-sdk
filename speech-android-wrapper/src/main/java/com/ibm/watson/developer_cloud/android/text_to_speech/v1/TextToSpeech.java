@@ -90,6 +90,15 @@ public class TextToSpeech {
         }
     }
 
+    public void endCurrentAudio() {
+        try {
+            ttsUtility.stopTtsPlayer();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void buildAuthenticationHeader(HttpGet httpGet) {
 
         // use token based authentication if possible, otherwise Basic Authentication will be used

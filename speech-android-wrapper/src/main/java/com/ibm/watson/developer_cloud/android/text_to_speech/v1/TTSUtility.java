@@ -87,10 +87,8 @@ public class TTSUtility extends Application {
     /**
      * Stop player
      */
-	private void stopTtsPlayer() {
+	public void stopTtsPlayer() {
         if (audioTrack != null && audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED ) {
-            // IMPORTANT: NOT use stop()
-            // For an immediate stop, use pause(), followed by flush() to discard audio data that hasn't been played back yet.
             audioTrack.pause();
             audioTrack.flush();
         }
