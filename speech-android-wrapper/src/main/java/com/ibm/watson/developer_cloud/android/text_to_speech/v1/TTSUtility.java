@@ -67,10 +67,12 @@ public class TTSUtility extends Application {
 	private int sampleRate;
 	private String server;
 	private AudioTrack audioTrack;
+    private AudioCallback callback;
 
 
-	public TTSUtility(){
+	public TTSUtility(AudioCallback callback){
 		this.codec = CODEC_WAV;
+        this.callback = callback;
         // By default, the sample rate would be detected by the SDK if the value is set to zero
         // However, the metadata is not reliable, need to decode at the maximum sample rate
         this.sampleRate = 48000;
@@ -91,6 +93,8 @@ public class TTSUtility extends Application {
         if (audioTrack != null && audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED ) {
             audioTrack.pause();
             audioTrack.flush();
+            if(callback!=null)
+                callback.playbackStopped();
         }
 	}
 
@@ -215,6 +219,8 @@ public class TTSUtility extends Application {
 				else if(codec == CODEC_OPUS){
 					data = analyzeOpusData(is);
 				}
+                if(callback!=null)
+                    callback.playbackStarted();
                 initPlayer();
                 audioTrack.write(data, 0, data.length);
                 is.close();
@@ -222,6 +228,8 @@ public class TTSUtility extends Application {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
+                if(callback!=null)
+                    callback.playbackStopped();
                 Log.i(TAG, "Stopping audioTrack...");
 				if (audioTrack != null && audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED) {
 					audioTrack.release();

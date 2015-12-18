@@ -49,6 +49,7 @@ public class TextToSpeech {
     private URI hostURL;
     private TokenProvider tokenProvider = null;
     private String voice;
+    private AudioCallback callback;
 
     /**Speech Recognition Shared Instance
      *
@@ -81,7 +82,7 @@ public class TextToSpeech {
         String[] Arguments = { this.hostURL.toString()+"/v1/synthesize", this.username, this.password,
                 this.voice, ttsString, this.tokenProvider == null ? null : this.tokenProvider.getToken()};
         try {
-            ttsUtility = new TTSUtility();
+            ttsUtility = new TTSUtility(callback);
             ttsUtility.setCodec(TTSUtility.CODEC_WAV);
             ttsUtility.synthesize(Arguments);
         }
@@ -167,5 +168,12 @@ public class TextToSpeech {
      */
     public void setVoice(String voice) {
         this.voice = voice;
+    }
+
+    /**
+     * Set audio callback
+     */
+    public void setCallback(AudioCallback callback) {
+        this.callback = callback;
     }
 }
